@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace RefugeesUnitedApi
+namespace RefugeesUnitedApi.ApiEntities
 {
   [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
   public class MessageThread
