@@ -51,6 +51,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="MessagingIntegrationTests.cs" />
+    <Compile Include="ProfileIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

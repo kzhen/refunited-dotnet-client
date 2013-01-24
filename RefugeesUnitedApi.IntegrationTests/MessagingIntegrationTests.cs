@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RefugeesUnitedApi.ApiEntities;
 
 namespace RefugeesUnitedApi.Tests
 {
@@ -12,22 +13,6 @@ namespace RefugeesUnitedApi.Tests
       UserName = "",
       Password = ""
     };
-
-    [TestClass]
-    public class ProfileInformation
-    {
-      [TestMethod]
-      public void ShouldGetUsersProfile()
-      {
-        int accountId = 324784;
-
-        ApiRequest apiRequest = new ApiRequest(requestSettings);
-        Profile p = apiRequest.GetProfile(accountId);
-
-        Assert.AreEqual("Basil", p.FirstName);
-        Assert.AreEqual("Brown", p.Surname);
-      }
-    }
 
     [TestClass]
     public class UnreadMessagesTest

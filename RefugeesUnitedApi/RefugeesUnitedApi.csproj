@@ -44,14 +44,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiEndpointUris.cs" />
     <Compile Include="ApiRequest.cs" />
     <Compile Include="ApiRequestSettings.cs" />
-    <Compile Include="MessageThread.cs" />
-    <Compile Include="MessageThreadSummary.cs" />
-    <Compile Include="Profile.cs" />
-    <Compile Include="ProfileMessageCollection.cs" />
+    <Compile Include="Exceptions\InvalidParameterException.cs" />
+    <Compile Include="Exceptions\NoDeleteException.cs" />
+    <Compile Include="Exceptions\NoPostException.cs" />
+    <Compile Include="Exceptions\NoPutException.cs" />
+    <Compile Include="ApiEntities\MessageThread.cs" />
+    <Compile Include="ApiEntities\MessageThreadSummary.cs" />
+    <Compile Include="ApiEntities\Profile.cs" />
+    <Compile Include="ApiEntities\ProfileMessageCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnreadMessages.cs" />
+    <Compile Include="ApiEntities\UnreadMessages.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
