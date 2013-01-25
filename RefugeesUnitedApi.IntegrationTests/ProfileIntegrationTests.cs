@@ -13,9 +13,6 @@ namespace RefugeesUnitedApi.Tests
   {
     public static ApiRequestSettings requestSettings = new ApiRequestSettings()
     {
-      Host = "",
-      UserName = "",
-      Password = ""
     };
 
     [TestClass]
@@ -24,10 +21,10 @@ namespace RefugeesUnitedApi.Tests
       [TestMethod]
       public void ShouldGetUsersProfile()
       {
-        int accountId = 324784;
+        int profileId = 324784;
 
         ApiRequest apiRequest = new ApiRequest(requestSettings);
-        Profile p = apiRequest.GetProfile(accountId);
+        Profile p = apiRequest.GetProfile(profileId);
 
         Assert.AreEqual("Basil", p.FirstName);
         Assert.AreEqual("Brown", p.Surname);

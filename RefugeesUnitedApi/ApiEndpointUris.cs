@@ -8,14 +8,14 @@ namespace RefugeesUnitedApi
 {
   internal class ApiEndpointUris
   {
-    internal const string Country_Detail = "/country/:countryid";
+    internal const string Country_Detail = "/country/{countryId}";
     internal const string Country_Collection = "/country";
     internal const string Language_Collection = "/language";
-    internal const string Message_Collection = "/profile/:profileid/messages";
-    internal const string Message_Unread = "/profile/:profileid/unreadmessages";
-    internal const string Message_View = "/profile/:profileid/messages/:profileid2";
+    internal const string Message_Collection = "/profile/{profileId}/messages";
+    internal const string Message_Unread = "/profile/{profileId}/unreadmessages";
+    internal const string Message_View = "/profile/{profileId}/messages/{targetProfile}";
     internal const string Profile_Collection = "/profile";
-    internal const string Profile_Favorites = "/profile/:profileid/favorites";
-    internal const string Profile_View = "/profile/:profileid";
+    internal const string Profile_Favorites = "/profile/{profileId}/favorites";
+    internal const string Profile_View = "/profile/{profileId}";
   }
 }

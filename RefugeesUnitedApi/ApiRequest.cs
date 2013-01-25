@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RefugeesUnitedApi.ApiEntities;
 using RefugeesUnitedApi.Exceptions;
+using System.Text.RegularExpressions;
 
 namespace RefugeesUnitedApi
 {
@@ -20,32 +21,73 @@ namespace RefugeesUnitedApi
       this.requestSettings = requestSettings;
     }
 
-    public ProfileUnreadMessage GetUnreadMessages(int accountId)
+    public ProfileUnreadMessage GetUnreadMessages(int profileId)
     {
-      string endpointUrl = string.Format("{0}/profile/{1}/unreadmessages", requestSettings.Host, accountId);
+      Dictionary<string, string> args = new Dictionary<string, string>();
+      args["profileId"] = profileId.ToString();
+
+      string endpointUrl = GenerateEndPointUri(ApiEndpointUris.Message_Unread, args);
 
       return IssueApiGETRequest<ProfileUnreadMessage>(endpointUrl);
     }
 
-    public ProfileMessageCollection GetMessageCollection(int accountId)
+    public ProfileMessageCollection GetMessageCollection(int profileId)
     {
-      string endpointUrl = string.Format("{0}/profile/{1}/messages", requestSettings.Host, accountId);
+      Dictionary<string, string> args = new Dictionary<string, string>();
+      args["profileId"] = profileId.ToString();
+
+      string endpointUrl = GenerateEndPointUri(ApiEndpointUris.Message_Collection, args);
 
       return IssueApiGETRequest<ProfileMessageCollection>(endpointUrl);
     }
 
-    public MessageThread GetMessageThread(int accountId, int targetAccountId)
+    public MessageThread GetMessageThread(int profileId, int targetProfileId)
     {
-      string endpointUrl = string.Format("{0}/profile/{1}/messages/{2}", requestSettings.Host, accountId, targetAccountId);
+      Dictionary<string, string> args = new Dictionary<string, string>();
+      args["profileId"] = profileId.ToString();
+      args["targetProfile"] = targetProfileId.ToString();
+
+      string endpointUrl = GenerateEndPointUri(ApiEndpointUris.Message_View, args);
 
       return IssueApiGETRequest<MessageThread>(endpointUrl);
     }
 
-    public Profile GetProfile(int accountId)
+    public Profile GetProfile(int profileId)
     {
-      string endpointUrl = string.Format("{0}/profile/{1}", requestSettings.Host, accountId);
+      Dictionary<string, string> args = new Dictionary<string, string>();
+      args["profileId"] = profileId.ToString();
+
+      string endpointUrl = GenerateEndPointUri(ApiEndpointUris.Profile_View, args);
 
       return IssueApiGETRequest<ProfileWrapper>(endpointUrl).UserProfile;
+    }
+
+    private string GenerateEndPointUri(string resourceTemplateUri, Dictionary<string, string> args)
+    {
+      StringBuilder endpointUri = new StringBuilder();
+
+      if (requestSettings.Host[requestSettings.Host.Length - 1] == '/')
+      {
+        endpointUri.Append(requestSettings.Host);
+      }
+      else
+      {
+        endpointUri.Append(requestSettings.Host);
+        endpointUri.Append("/");
+      }
+
+      string template = Regex.Replace(resourceTemplateUri, @"\{(.+?)\}", m => args[m.Groups[1].Value]);
+
+      if (template[0] == '/')
+      {
+        endpointUri.Append(template.Substring(1));
+      }
+      else
+      {
+        endpointUri.Append(template);
+      }
+
+      return endpointUri.ToString();
     }
 
     private T IssueApiDELETERequest<T>(string endPointUrl)
@@ -91,7 +133,7 @@ namespace RefugeesUnitedApi
         using (var client = new HttpClient(handler))
         {
           var content = new StringContent("");
-          
+
           var response = client.PutAsync(endPointUrl, content).Result;
 
           if (response.IsSuccessStatusCode)
@@ -107,7 +149,7 @@ namespace RefugeesUnitedApi
             {
               case HttpStatusCode.BadRequest:
                 throw new InvalidParameterException("Invalid parameters");
-             case HttpStatusCode.MethodNotAllowed:
+              case HttpStatusCode.MethodNotAllowed:
                 throw new NoPutException("This method is not accepted for this API call.");
             }
             throw new Exception("Unable to process request");

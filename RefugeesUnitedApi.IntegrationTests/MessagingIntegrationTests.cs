@@ -9,9 +9,6 @@ namespace RefugeesUnitedApi.Tests
   {
     public static ApiRequestSettings requestSettings = new ApiRequestSettings()
     {
-      Host = "",
-      UserName = "",
-      Password = ""
     };
 
     [TestClass]
@@ -22,9 +19,9 @@ namespace RefugeesUnitedApi.Tests
       {
         ApiRequest apiRequest = new ApiRequest(requestSettings);
 
-        int accountId = 280976;
+        int profileId = 280976;
 
-        ProfileUnreadMessage unread = apiRequest.GetUnreadMessages(accountId);
+        ProfileUnreadMessage unread = apiRequest.GetUnreadMessages(profileId);
 
         Assert.AreEqual(1, unread.UnreadMessages);
       }
@@ -37,9 +34,9 @@ namespace RefugeesUnitedApi.Tests
       public void ShouldReturnAListOfMessages()
       {
         ApiRequest apiRequest = new ApiRequest(requestSettings);
-        int accountId = 280976;
+        int profileId = 280976;
 
-        ProfileMessageCollection collection = apiRequest.GetMessageCollection(accountId);
+        ProfileMessageCollection collection = apiRequest.GetMessageCollection(profileId);
 
         Assert.AreEqual(2, collection.threads.Length);
       }
@@ -52,10 +49,10 @@ namespace RefugeesUnitedApi.Tests
       public void ShouldReturnAMessageThread()
       {
         ApiRequest apiRequest = new ApiRequest(requestSettings);
-        int accountId = 280976;
-        int targetAccountId = 324317;
+        int profileId = 280976;
+        int targetProfileId = 324317;
 
-        MessageThread thread = apiRequest.GetMessageThread(accountId, targetAccountId);
+        MessageThread thread = apiRequest.GetMessageThread(profileId, targetProfileId);
         
 
         Assert.IsNotNull(thread);
