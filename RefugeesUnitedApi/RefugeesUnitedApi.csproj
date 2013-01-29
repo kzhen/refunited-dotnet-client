@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiEndpointUris.cs" />
+    <Compile Include="ApiEntities\Language.cs" />
     <Compile Include="ApiRequest.cs" />
     <Compile Include="ApiRequestSettings.cs" />
     <Compile Include="Exceptions\InvalidParameterException.cs" />

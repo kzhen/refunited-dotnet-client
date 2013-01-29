@@ -62,6 +62,15 @@ namespace RefugeesUnitedApi
       return IssueApiGETRequest<ProfileWrapper>(endpointUrl).UserProfile;
     }
 
+    public List<Language> GetLanguages()
+    {
+      string endpointUrl = GenerateEndPointUri(ApiEndpointUris.Language_Collection, new Dictionary<string, string>());
+
+      var languageCollection = IssueApiGETRequest<LanguageCollectionWrapper>(endpointUrl);
+
+      return languageCollection.Languages;
+    }
+
     private string GenerateEndPointUri(string resourceTemplateUri, Dictionary<string, string> args)
     {
       StringBuilder endpointUri = new StringBuilder();
