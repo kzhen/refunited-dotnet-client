@@ -9,16 +9,21 @@ using Newtonsoft.Json;
 using RefugeesUnitedApi.ApiEntities;
 using RefugeesUnitedApi.Exceptions;
 using System.Text.RegularExpressions;
+using RefugeesUnitedApi.JsonConverters;
 
 namespace RefugeesUnitedApi
 {
   public class ApiRequest
   {
     private ApiRequestSettings requestSettings;
+    private JsonSerializerSettings jsonSerializerSettings;
 
     public ApiRequest(ApiRequestSettings requestSettings)
     {
       this.requestSettings = requestSettings;
+
+      this.jsonSerializerSettings =  new JsonSerializerSettings();
+      this.jsonSerializerSettings.Converters.Add(new CountriesConverter());
     }
 
     public ProfileUnreadMessage GetUnreadMessages(int profileId)
@@ -75,13 +80,9 @@ namespace RefugeesUnitedApi
     {
       string endpointUrl = GenerateEndPointUri(ApiEndpointUris.Country_Collection, new Dictionary<string, string>());
 
-      var countries = IssueApiGETRequest<CountriesWrapper>(endpointUrl);
+      var countries = IssueApiGETRequest<List<Country>>(endpointUrl, this.jsonSerializerSettings);
 
-      return countries.Countries.Select(x =>
-      {
-        x.Value.Id = x.Key;
-        return x.Value;
-      }).ToList();
+      return countries;
     }
 
     private string GenerateEndPointUri(string resourceTemplateUri, Dictionary<string, string> args)
@@ -214,7 +215,7 @@ namespace RefugeesUnitedApi
       }
     }
 
-    private T IssueApiGETRequest<T>(string endPointUrl)
+    private T IssueApiGETRequest<T>(string endPointUrl, JsonSerializerSettings jsonSettings = null)
     {
       using (var handler = new HttpClientHandler())
       {
@@ -227,7 +228,7 @@ namespace RefugeesUnitedApi
           if (response.IsSuccessStatusCode)
           {
             string json = response.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<T>(json);
+            var result = JsonConvert.DeserializeObject<T>(json, jsonSettings);
 
             return result;
           }

@@ -57,6 +57,7 @@
     <Compile Include="ApiEntities\MessageThreadSummary.cs" />
     <Compile Include="ApiEntities\Profile.cs" />
     <Compile Include="ApiEntities\ProfileMessageCollection.cs" />
+    <Compile Include="JsonConverters\CountriesConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ApiEntities\UnreadMessages.cs" />
   </ItemGroup>
