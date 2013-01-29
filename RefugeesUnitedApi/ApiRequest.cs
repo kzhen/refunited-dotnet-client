@@ -71,6 +71,19 @@ namespace RefugeesUnitedApi
       return languageCollection.Languages;
     }
 
+    public List<Country> GetCountries()
+    {
+      string endpointUrl = GenerateEndPointUri(ApiEndpointUris.Country_Collection, new Dictionary<string, string>());
+
+      var countries = IssueApiGETRequest<CountriesWrapper>(endpointUrl);
+
+      return countries.Countries.Select(x =>
+      {
+        x.Value.Id = x.Key;
+        return x.Value;
+      }).ToList();
+    }
+
     private string GenerateEndPointUri(string resourceTemplateUri, Dictionary<string, string> args)
     {
       StringBuilder endpointUri = new StringBuilder();
