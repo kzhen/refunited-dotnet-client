@@ -85,6 +85,18 @@ namespace RefugeesUnitedApi
       return countries;
     }
 
+    public bool GetProfileExists(string userName)
+    {
+      var args = new Dictionary<string, string>();
+      args["userName"] = userName;
+
+      string endpointUrl = GenerateEndPointUri(ApiEndpointUris.Profile_exists, args);
+
+      object result = IssueApiGETRequest<object>(endpointUrl);
+
+      return ((Newtonsoft.Json.Linq.JContainer)result)["exists"].ToString() == "True";
+    }
+
     private string GenerateEndPointUri(string resourceTemplateUri, Dictionary<string, string> args)
     {
       StringBuilder endpointUri = new StringBuilder();

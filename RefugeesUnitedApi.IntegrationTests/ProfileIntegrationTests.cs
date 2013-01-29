@@ -16,6 +16,34 @@ namespace RefugeesUnitedApi.Tests
     };
 
     [TestClass]
+    public class ProfileExists
+    {
+      [TestMethod]
+      public void ShouldCheckIfAccountExists()
+      {
+        string username = "Basil123";
+
+        ApiRequest apiRequest = new ApiRequest(requestSettings);
+
+        var exists = apiRequest.GetProfileExists(username);
+
+        Assert.AreEqual(true, exists);
+      }
+
+      [TestMethod]
+      public void ShouldCheckIfAccountDoesntExists()
+      {
+        string username = "asdddddss234234234";
+
+        ApiRequest apiRequest = new ApiRequest(requestSettings);
+
+        var exists = apiRequest.GetProfileExists(username);
+
+        Assert.AreEqual(false, exists);
+      }
+    }
+
+    [TestClass]
     public class ProfileInformation
     {
       [TestMethod]

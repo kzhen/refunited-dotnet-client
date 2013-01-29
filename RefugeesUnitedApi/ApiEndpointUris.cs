@@ -17,5 +17,6 @@ namespace RefugeesUnitedApi
     internal const string Profile_Collection = "/profile";
     internal const string Profile_Favorites = "/profile/{profileId}/favorites";
     internal const string Profile_View = "/profile/{profileId}";
+    internal const string Profile_exists = "/profile/exists/{userName}";
   }
 }
