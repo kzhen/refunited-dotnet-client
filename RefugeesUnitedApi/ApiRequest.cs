@@ -13,17 +13,20 @@ using RefugeesUnitedApi.JsonConverters;
 
 namespace RefugeesUnitedApi
 {
-  public class ApiRequest
+  public class ApiRequest : RefugeesUnitedApi.IApiRequest
   {
     private ApiRequestSettings requestSettings;
-    private JsonSerializerSettings jsonSerializerSettings;
+    private ApiHttpRequest apiHttpRequester;
 
     public ApiRequest(ApiRequestSettings requestSettings)
     {
-      this.requestSettings = requestSettings;
+      if (requestSettings == null)
+      {
+        throw new ArgumentNullException("requestSettings");
+      }
 
-      this.jsonSerializerSettings =  new JsonSerializerSettings();
-      this.jsonSerializerSettings.Converters.Add(new CountriesConverter());
+      this.requestSettings = requestSettings;
+      this.apiHttpRequester = new ApiHttpRequest(requestSettings);
     }
 
     public ProfileUnreadMessage GetUnreadMessages(int profileId)
@@ -31,9 +34,9 @@ namespace RefugeesUnitedApi
       Dictionary<string, string> args = new Dictionary<string, string>();
       args["profileId"] = profileId.ToString();
 
-      string endpointUrl = GenerateEndPointUri(ApiEndpointUris.Message_Unread, args);
+      string endpointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Message_Unread, requestSettings, args);
 
-      return IssueApiGETRequest<ProfileUnreadMessage>(endpointUrl);
+      return apiHttpRequester.IssueApiGETRequest<ProfileUnreadMessage>(endpointUrl);
     }
 
     public ProfileMessageCollection GetMessageCollection(int profileId)
@@ -41,9 +44,9 @@ namespace RefugeesUnitedApi
       Dictionary<string, string> args = new Dictionary<string, string>();
       args["profileId"] = profileId.ToString();
 
-      string endpointUrl = GenerateEndPointUri(ApiEndpointUris.Message_Collection, args);
+      string endpointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Message_Collection, requestSettings, args);
 
-      return IssueApiGETRequest<ProfileMessageCollection>(endpointUrl);
+      return apiHttpRequester.IssueApiGETRequest<ProfileMessageCollection>(endpointUrl);
     }
 
     public MessageThread GetMessageThread(int profileId, int targetProfileId)
@@ -52,9 +55,9 @@ namespace RefugeesUnitedApi
       args["profileId"] = profileId.ToString();
       args["targetProfile"] = targetProfileId.ToString();
 
-      string endpointUrl = GenerateEndPointUri(ApiEndpointUris.Message_View, args);
+      string endpointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Message_View, requestSettings, args);
 
-      return IssueApiGETRequest<MessageThread>(endpointUrl);
+      return apiHttpRequester.IssueApiGETRequest<MessageThread>(endpointUrl);
     }
 
     public Profile GetProfile(int profileId)
@@ -62,25 +65,25 @@ namespace RefugeesUnitedApi
       Dictionary<string, string> args = new Dictionary<string, string>();
       args["profileId"] = profileId.ToString();
 
-      string endpointUrl = GenerateEndPointUri(ApiEndpointUris.Profile_View, args);
+      string endpointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Profile_View, requestSettings, args);
 
-      return IssueApiGETRequest<ProfileWrapper>(endpointUrl).UserProfile;
+      return apiHttpRequester.IssueApiGETRequest<ProfileWrapper>(endpointUrl).UserProfile;
     }
 
     public List<Language> GetLanguages()
     {
-      string endpointUrl = GenerateEndPointUri(ApiEndpointUris.Language_Collection, new Dictionary<string, string>());
+      string endpointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Language_Collection, requestSettings, new Dictionary<string, string>());
 
-      var languageCollection = IssueApiGETRequest<LanguageCollectionWrapper>(endpointUrl);
+      var languageCollection = apiHttpRequester.IssueApiGETRequest<LanguageCollectionWrapper>(endpointUrl);
 
       return languageCollection.Languages;
     }
 
     public List<Country> GetCountries()
     {
-      string endpointUrl = GenerateEndPointUri(ApiEndpointUris.Country_Collection, new Dictionary<string, string>());
+      string endpointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Country_Collection, requestSettings, new Dictionary<string, string>());
 
-      var countries = IssueApiGETRequest<List<Country>>(endpointUrl, this.jsonSerializerSettings);
+      var countries = apiHttpRequester.IssueApiGETRequest<List<Country>>(endpointUrl);
 
       return countries;
     }
@@ -90,171 +93,13 @@ namespace RefugeesUnitedApi
       var args = new Dictionary<string, string>();
       args["userName"] = userName;
 
-      string endpointUrl = GenerateEndPointUri(ApiEndpointUris.Profile_exists, args);
+      string endpointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Profile_exists, requestSettings, args);
 
-      object result = IssueApiGETRequest<object>(endpointUrl);
+      object result = apiHttpRequester.IssueApiGETRequest<object>(endpointUrl);
 
       return ((Newtonsoft.Json.Linq.JContainer)result)["exists"].ToString() == "True";
     }
 
-    private string GenerateEndPointUri(string resourceTemplateUri, Dictionary<string, string> args)
-    {
-      StringBuilder endpointUri = new StringBuilder();
-
-      if (requestSettings.Host[requestSettings.Host.Length - 1] == '/')
-      {
-        endpointUri.Append(requestSettings.Host);
-      }
-      else
-      {
-        endpointUri.Append(requestSettings.Host);
-        endpointUri.Append("/");
-      }
-
-      string template = Regex.Replace(resourceTemplateUri, @"\{(.+?)\}", m => args[m.Groups[1].Value]);
-
-      if (template[0] == '/')
-      {
-        endpointUri.Append(template.Substring(1));
-      }
-      else
-      {
-        endpointUri.Append(template);
-      }
-
-      return endpointUri.ToString();
-    }
-
-    private T IssueApiDELETERequest<T>(string endPointUrl)
-    {
-      using (var handler = new HttpClientHandler())
-      {
-        handler.Credentials = new NetworkCredential(requestSettings.UserName, requestSettings.Password);
-
-        using (var client = new HttpClient(handler))
-        {
-          var content = new StringContent("");
-
-          var response = client.DeleteAsync(endPointUrl).Result;
-
-          if (response.IsSuccessStatusCode)
-          {
-            string json = response.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<T>(json);
-
-            return result;
-          }
-          else
-          {
-            switch (response.StatusCode)
-            {
-              case HttpStatusCode.BadRequest:
-                throw new InvalidParameterException("Invalid parameters");
-              case HttpStatusCode.MethodNotAllowed:
-                throw new NoDeleteException("This method is not accepted for this API call.");
-            }
-            throw new Exception("Unable to process request");
-          }
-        }
-      }
-    }
-
-    private T IssueApiPUTRequest<T>(string endPointUrl)
-    {
-      using (var handler = new HttpClientHandler())
-      {
-        handler.Credentials = new NetworkCredential(requestSettings.UserName, requestSettings.Password);
-
-        using (var client = new HttpClient(handler))
-        {
-          var content = new StringContent("");
-
-          var response = client.PutAsync(endPointUrl, content).Result;
-
-          if (response.IsSuccessStatusCode)
-          {
-            string json = response.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<T>(json);
-
-            return result;
-          }
-          else
-          {
-            switch (response.StatusCode)
-            {
-              case HttpStatusCode.BadRequest:
-                throw new InvalidParameterException("Invalid parameters");
-              case HttpStatusCode.MethodNotAllowed:
-                throw new NoPutException("This method is not accepted for this API call.");
-            }
-            throw new Exception("Unable to process request");
-          }
-        }
-      }
-    }
-
-    private T IssueApiPOSTRequest<T>(string endPointUrl)
-    {
-      using (var handler = new HttpClientHandler())
-      {
-        handler.Credentials = new NetworkCredential(requestSettings.UserName, requestSettings.Password);
-
-        using (HttpClient client = new HttpClient(handler))
-        {
-          HttpContent content = new StringContent(""); //TODO: allow the passing in of the content
-
-          var response = client.PostAsync(endPointUrl, content).Result;
-
-          if (response.IsSuccessStatusCode)
-          {
-            string json = response.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<T>(json);
-
-            return result;
-          }
-          else
-          {
-            switch (response.StatusCode)
-            {
-              case HttpStatusCode.BadRequest:
-                throw new InvalidParameterException("Invalid parameters");
-              case HttpStatusCode.MethodNotAllowed:
-                throw new NoPostException("This method is not accepted for this API call.");
-            }
-            throw new Exception("Unable to process request");
-          }
-        }
-      }
-    }
-
-    private T IssueApiGETRequest<T>(string endPointUrl, JsonSerializerSettings jsonSettings = null)
-    {
-      using (var handler = new HttpClientHandler())
-      {
-        handler.Credentials = new NetworkCredential(requestSettings.UserName, requestSettings.Password);
-
-        using (HttpClient client = new HttpClient(handler))
-        {
-          var response = client.GetAsync(endPointUrl).Result;
-
-          if (response.IsSuccessStatusCode)
-          {
-            string json = response.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<T>(json, jsonSettings);
-
-            return result;
-          }
-          else
-          {
-            switch (response.StatusCode)
-            {
-              case HttpStatusCode.BadRequest:
-                throw new InvalidParameterException("Invalid parameters");
-            }
-            throw new Exception("Unable to process request");
-          }
-        }
-      }
-    }
+    
   }
 }

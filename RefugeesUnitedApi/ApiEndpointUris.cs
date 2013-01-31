@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace RefugeesUnitedApi
@@ -18,5 +19,33 @@ namespace RefugeesUnitedApi
     internal const string Profile_Favorites = "/profile/{profileId}/favorites";
     internal const string Profile_View = "/profile/{profileId}";
     internal const string Profile_exists = "/profile/exists/{userName}";
+
+    internal static string GenerateEndPointUri(string resourceTemplateUri, ApiRequestSettings requestSettings, Dictionary<string, string> args)
+    {
+      StringBuilder endpointUri = new StringBuilder();
+
+      if (requestSettings.Host[requestSettings.Host.Length - 1] == '/')
+      {
+        endpointUri.Append(requestSettings.Host);
+      }
+      else
+      {
+        endpointUri.Append(requestSettings.Host);
+        endpointUri.Append("/");
+      }
+
+      string template = Regex.Replace(resourceTemplateUri, @"\{(.+?)\}", m => args[m.Groups[1].Value]);
+
+      if (template[0] == '/')
+      {
+        endpointUri.Append(template.Substring(1));
+      }
+      else
+      {
+        endpointUri.Append(template);
+      }
+
+      return endpointUri.ToString();
+    }
   }
 }
