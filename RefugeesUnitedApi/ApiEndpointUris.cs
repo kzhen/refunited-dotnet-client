@@ -35,7 +35,14 @@ namespace RefugeesUnitedApi
         endpointUri.Append("/");
       }
 
-      string template = Regex.Replace(resourceTemplateUri, @"\{(.+?)\}", m => args[m.Groups[1].Value]);
+      MatchEvaluator eval = new MatchEvaluator((m) =>
+      {
+        if (args.ContainsKey(m.Value))
+          return args[m.Value];
+        return "";
+      });
+
+      string template = Regex.Replace(resourceTemplateUri, @"\{(.+?)\}", eval);
 
       if (template[0] == '/')
       {
