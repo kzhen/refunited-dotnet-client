@@ -16,6 +16,24 @@ namespace RefugeesUnitedApi.Tests
     };
 
     [TestClass]
+    public class ProfileLoginTests
+    {
+      [TestMethod]
+      public void ShouldLoginTheUser()
+      {
+        string username = "basil123";
+        string password = "Passw0rd";
+
+        ApiRequest apiRequest = new ApiRequest(requestSettings);
+
+        var result = apiRequest.ProfileLogin(username, password);
+
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Authenticated, "User is not authenticated");
+      }
+    }
+
+    [TestClass]
     public class ProfileExists
     {
       [TestMethod]

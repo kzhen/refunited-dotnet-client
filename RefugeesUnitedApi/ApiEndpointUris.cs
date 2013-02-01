@@ -19,6 +19,7 @@ namespace RefugeesUnitedApi
     internal const string Profile_Favorites = "/profile/{profileId}/favorites";
     internal const string Profile_View = "/profile/{profileId}";
     internal const string Profile_exists = "/profile/exists/{userName}";
+    internal const string Profile_login = "/profile/login/{userName}?password={password}";
 
     internal static string GenerateEndPointUri(string resourceTemplateUri, ApiRequestSettings requestSettings, Dictionary<string, string> args)
     {

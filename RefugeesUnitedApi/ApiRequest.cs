@@ -13,7 +13,7 @@ using RefugeesUnitedApi.JsonConverters;
 
 namespace RefugeesUnitedApi
 {
-  public class ApiRequest : RefugeesUnitedApi.IApiRequest
+  public class ApiRequest : IApiRequest
   {
     private ApiRequestSettings requestSettings;
     private ApiHttpRequest apiHttpRequester;
@@ -100,6 +100,17 @@ namespace RefugeesUnitedApi
       return ((Newtonsoft.Json.Linq.JContainer)result)["exists"].ToString() == "True";
     }
 
-    
+    public ProfileLoginResult ProfileLogin(string userName, string password)
+    {
+      var args = new Dictionary<string, string>();
+      args["userName"] = userName;
+      args["password"] = password;
+
+      string endPointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Profile_login, requestSettings, args);
+
+      var loginResult = apiHttpRequester.IssueApiGETRequest<ProfileLoginResult>(endPointUrl);
+
+      return loginResult;
+    }
   }
 }
