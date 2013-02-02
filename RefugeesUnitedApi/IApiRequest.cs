@@ -13,5 +13,6 @@ namespace RefugeesUnitedApi
     bool GetProfileExists(string userName);
     ProfileUnreadMessage GetUnreadMessages(int profileId);
     ProfileLoginResult ProfileLogin(string userName, string password);
+    SearchResults Search(string name, int page, int limit);
   }
 }

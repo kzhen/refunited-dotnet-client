@@ -24,5 +24,11 @@ namespace RefugeesUnitedApi.ApiEntities
 
     [JsonProperty(PropertyName = "surName")]
     public string Surname { get; set; }
+
+    [JsonProperty(PropertyName = "age")]
+    public int? Age { get; set; }
+
+    [JsonProperty(PropertyName = "genderId")]
+    public int? GenderId { get; set; }
   }
 }

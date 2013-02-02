@@ -20,6 +20,7 @@ namespace RefugeesUnitedApi
     internal const string Profile_View = "/profile/{profileId}";
     internal const string Profile_exists = "/profile/exists/{userName}";
     internal const string Profile_login = "/profile/login/{userName}?password={password}";
+    internal const string Search = "/search?name={name}&page={page}&limit={limit}";
 
     internal static string GenerateEndPointUri(string resourceTemplateUri, ApiRequestSettings requestSettings, Dictionary<string, string> args)
     {
@@ -35,14 +36,7 @@ namespace RefugeesUnitedApi
         endpointUri.Append("/");
       }
 
-      MatchEvaluator eval = new MatchEvaluator((m) =>
-      {
-        if (args.ContainsKey(m.Value))
-          return args[m.Value];
-        return "";
-      });
-
-      string template = Regex.Replace(resourceTemplateUri, @"\{(.+?)\}", eval);
+      string template = Regex.Replace(resourceTemplateUri, @"\{(.+?)\}", m => args[m.Groups[1].Value], RegexOptions.IgnoreCase);
 
       if (template[0] == '/')
       {

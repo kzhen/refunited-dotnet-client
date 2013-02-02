@@ -48,6 +48,7 @@
     <Compile Include="ApiEntities\Country.cs" />
     <Compile Include="ApiEntities\Language.cs" />
     <Compile Include="ApiEntities\ProfileLoginResult.cs" />
+    <Compile Include="ApiEntities\SearchResults.cs" />
     <Compile Include="ApiHttpRequest.cs" />
     <Compile Include="ApiRequest.cs" />
     <Compile Include="ApiRequestSettings.cs" />

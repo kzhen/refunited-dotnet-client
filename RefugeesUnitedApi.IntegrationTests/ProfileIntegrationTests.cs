@@ -16,6 +16,22 @@ namespace RefugeesUnitedApi.Tests
     };
 
     [TestClass]
+    public class SearchTests
+    {
+      [TestMethod]
+      public void ShouldSearchForAUser()
+      {
+        string name = "basil brown";
+
+        ApiRequest apiRequest = new ApiRequest(requestSettings);
+
+        var results = apiRequest.Search(name);
+
+        Assert.IsNotNull(results);
+      }
+    }
+
+    [TestClass]
     public class ProfileLoginTests
     {
       [TestMethod]

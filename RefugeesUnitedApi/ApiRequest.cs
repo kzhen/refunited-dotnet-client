@@ -112,5 +112,19 @@ namespace RefugeesUnitedApi
 
       return loginResult;
     }
+
+    public SearchResults Search(string name, int page = 0, int limit = 10)
+    {
+      var args = new Dictionary<string, string>();
+      args["name"] = name;
+      args["page"] = page.ToString();
+      args["limit"] = limit.ToString();
+
+      string endPointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Search, requestSettings, args);
+
+      var results = apiHttpRequester.IssueApiGETRequest<SearchResults>(endPointUrl);
+
+      return results;
+    }
   }
 }
