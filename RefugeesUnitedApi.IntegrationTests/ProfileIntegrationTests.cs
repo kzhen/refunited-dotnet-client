@@ -16,6 +16,38 @@ namespace RefugeesUnitedApi.Tests
     };
 
     [TestClass]
+    public class ProfileUpdateTests
+    {
+      [TestMethod]
+      public void ShouldUpdateProfile()
+      {
+        int profileId = 324784;
+
+        Profile profile = new Profile()
+        {
+          ProfileId = profileId,
+          FirstName = "Basil",
+          Surname = "Brown",
+          Email = "refugee1@kenpire.com",
+          DialCode = "+44",
+          CellPhoneNumber = "123456"
+        };
+
+        ApiRequest apiRequest = new ApiRequest(requestSettings);
+
+        apiRequest.UpdateProfile(profile);
+
+        var selectedProfile = apiRequest.GetProfile(profileId);
+
+        Assert.AreEqual("Basil", selectedProfile.FirstName);
+        Assert.AreEqual("Brown", selectedProfile.Surname);
+        Assert.AreEqual("refugee1@kenpire.com", selectedProfile.Email);
+        Assert.AreEqual("+44", selectedProfile.DialCode);
+        Assert.AreEqual("123456", selectedProfile.CellPhoneNumber);
+      }
+    }
+
+    [TestClass]
     public class SearchTests
     {
       [TestMethod]

@@ -14,5 +14,6 @@ namespace RefugeesUnitedApi
     ProfileUnreadMessage GetUnreadMessages(int profileId);
     ProfileLoginResult ProfileLogin(string userName, string password);
     SearchResults Search(string name, int page, int limit);
+    void UpdateProfile(Profile profile);
   }
 }

@@ -58,7 +58,7 @@ namespace RefugeesUnitedApi
       }
     }
 
-    internal T IssueApiPUTRequest<T>(string endPointUrl)
+    internal T IssueApiPUTRequest<T>(string endPointUrl, Dictionary<string, string> putContent)
     {
       using (var handler = new HttpClientHandler())
       {
@@ -66,7 +66,13 @@ namespace RefugeesUnitedApi
 
         using (var client = new HttpClient(handler))
         {
-          var content = new StringContent("");
+          var postData = new List<KeyValuePair<string, string>>();
+          foreach (var item in putContent)
+          {
+            postData.Add(new KeyValuePair<string, string>(item.Key, item.Value));            
+          }
+
+          HttpContent content = new FormUrlEncodedContent(postData); 
 
           var response = client.PutAsync(endPointUrl, content).Result;
 

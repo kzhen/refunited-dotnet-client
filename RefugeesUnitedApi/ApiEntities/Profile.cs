@@ -16,6 +16,8 @@ namespace RefugeesUnitedApi.ApiEntities
 
   public class Profile
   {
+    public int ProfileId { get; set; }
+
     [JsonProperty(PropertyName = "primaryEmail")]
     public string Email { get; set; }
 

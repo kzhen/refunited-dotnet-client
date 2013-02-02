@@ -126,5 +126,31 @@ namespace RefugeesUnitedApi
 
       return results;
     }
+
+    public void UpdateProfile(Profile profile)
+    {
+      if (profile == null)
+      {
+        throw new ArgumentNullException("profile");
+      }
+      if (profile.ProfileId <= 0)
+      {
+        throw new ArgumentException("profileId must be specified");
+      }
+
+      var args = new Dictionary<string, string>();
+      args["profileId"] = profile.ProfileId.ToString();
+
+      string endPointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Profile_View, requestSettings, args);
+
+      var putContent = new Dictionary<string, string>();
+      putContent["primaryEmail"] = profile.Email;
+      putContent["givenName"] = profile.FirstName;
+      putContent["surName"] = profile.Surname;
+      putContent["dialCode"] = profile.DialCode;
+      putContent["cellPhone"] = profile.CellPhoneNumber;
+
+      var result = apiHttpRequester.IssueApiPUTRequest<Profile>(endPointUrl, putContent);
+    }
   }
 }
