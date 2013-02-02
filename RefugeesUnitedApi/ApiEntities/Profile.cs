@@ -30,5 +30,26 @@ namespace RefugeesUnitedApi.ApiEntities
 
     [JsonProperty(PropertyName = "genderId")]
     public int? GenderId { get; set; }
+
+    [JsonProperty(PropertyName = "isMissingPerson")]
+    public bool IsMissingPerson { get; set; }
+
+    [JsonProperty(PropertyName = "countryOfBirthId")]
+    public int? CountryOfBirthId { get; set; }
+
+    [JsonProperty(PropertyName = "dialCode")]
+    public string DialCode { get; set; }
+
+    [JsonProperty(PropertyName = "cellPhone")]
+    public string CellPhoneNumber { get; set; }
+
+    [JsonProperty(PropertyName = "homeTown")]
+    public string HomeTown { get; set; }
+
+    [JsonProperty(PropertyName = "tribe")]
+    public string Tribe { get; set; }
+
+    [JsonProperty(PropertyName = "nickName")]
+    public string NickName { get; set; }
   }
 }
