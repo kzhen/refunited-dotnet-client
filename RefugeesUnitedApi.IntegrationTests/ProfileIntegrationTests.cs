@@ -16,6 +16,23 @@ namespace RefugeesUnitedApi.Tests
     };
 
     [TestClass]
+    public class ProfileFavouritesTests
+    {
+      [TestMethod]
+      public void ShouldReturnAListOfFavourites()
+      {
+        int profileId = 324784;
+
+        ApiRequest request = new ApiRequest(requestSettings);
+
+        var result = request.GetFavourites(profileId);
+
+        Assert.IsNotNull(result);
+        Assert.AreEqual(1, result.Count);
+      }
+    }
+
+    [TestClass]
     public class ProfileUpdateTests
     {
       [TestMethod]

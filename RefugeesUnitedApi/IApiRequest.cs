@@ -10,6 +10,7 @@ namespace RefugeesUnitedApi
     ProfileMessageCollection GetMessageCollection(int profileId);
     MessageThread GetMessageThread(int profileId, int targetProfileId);
     Profile GetProfile(int profileId);
+    List<Profile> GetFavourites(int profileId);
     bool GetProfileExists(string userName);
     ProfileUnreadMessage GetUnreadMessages(int profileId);
     ProfileLoginResult ProfileLogin(string userName, string password);

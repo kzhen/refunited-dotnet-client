@@ -70,6 +70,18 @@ namespace RefugeesUnitedApi
       return apiHttpRequester.IssueApiGETRequest<ProfileWrapper>(endpointUrl).UserProfile;
     }
 
+    public List<Profile> GetFavourites(int profileId)
+    {
+      Dictionary<string, string> args = new Dictionary<string, string>();
+      args["profileId"] = profileId.ToString();
+
+      string endPointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Profile_Favorites, requestSettings, args);
+
+      var result = apiHttpRequester.IssueApiGETRequest<FavouritesWrapper>(endPointUrl);
+
+      return result.Favourites;
+    }
+
     public List<Language> GetLanguages()
     {
       string endpointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Language_Collection, requestSettings, new Dictionary<string, string>());
