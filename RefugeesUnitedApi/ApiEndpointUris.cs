@@ -21,6 +21,9 @@ namespace RefugeesUnitedApi
     internal const string Profile_exists = "/profile/exists/{userName}";
     internal const string Profile_login = "/profile/login/{userName}?password={password}";
     internal const string Search = "/search?name={name}&page={page}&limit={limit}";
+    internal const string Verification_complete = "/verification/{id}";
+    internal const string Verification_email = "/verification/email";
+    internal const string Verification_phone = "/verification/phone";
 
     internal static string GenerateEndPointUri(string resourceTemplateUri, ApiRequestSettings requestSettings, Dictionary<string, string> args)
     {

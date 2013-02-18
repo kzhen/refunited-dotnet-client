@@ -164,5 +164,20 @@ namespace RefugeesUnitedApi
 
       var result = apiHttpRequester.IssueApiPUTRequest<Profile>(endPointUrl, putContent);
     }
+
+    public void CompleteVerification(int profileId, string verificationCode)
+    {
+
+    }
+
+    public string GetEmailVerificationCode(int profileId, string email)
+    {
+      return "";
+    }
+
+    public string GetPhoneVerificationCode(int profileId, string dialCode, string cellPhone)
+    {
+      return "";
+    }
   }
 }

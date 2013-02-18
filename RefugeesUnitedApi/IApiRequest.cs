@@ -16,5 +16,8 @@ namespace RefugeesUnitedApi
     ProfileLoginResult ProfileLogin(string userName, string password);
     SearchResults Search(string name, int page, int limit);
     void UpdateProfile(Profile profile);
+    void CompleteVerification(int profileId, string verificationCode);
+    string GetEmailVerificationCode(int profileId, string email);
+    string GetPhoneVerificationCode(int profileId, string dialCode, string cellPhone);
   }
 }
