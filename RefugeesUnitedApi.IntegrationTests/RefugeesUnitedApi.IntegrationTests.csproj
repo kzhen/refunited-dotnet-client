@@ -55,6 +55,7 @@
     <Compile Include="MessagingIntegrationTests.cs" />
     <Compile Include="ProfileIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VerificationIntegrationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RefugeesUnitedApi\RefugeesUnitedApi.csproj">

@@ -98,7 +98,7 @@ namespace RefugeesUnitedApi
       }
     }
 
-    internal T IssueApiPOSTRequest<T>(string endPointUrl)
+    internal T IssueApiPOSTRequest<T>(string endPointUrl, HttpContent postContent)
     {
       using (var handler = new HttpClientHandler())
       {
@@ -106,9 +106,7 @@ namespace RefugeesUnitedApi
 
         using (HttpClient client = new HttpClient(handler))
         {
-          HttpContent content = new StringContent(""); //TODO: allow the passing in of the content
-
-          var response = client.PostAsync(endPointUrl, content).Result;
+          var response = client.PostAsync(endPointUrl, postContent).Result;
 
           if (response.IsSuccessStatusCode)
           {

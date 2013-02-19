@@ -167,16 +167,36 @@ namespace RefugeesUnitedApi
 
     public void CompleteVerification(int profileId, string verificationCode)
     {
-
     }
 
     public string GetEmailVerificationCode(int profileId, string email)
     {
+      var postData = new List<KeyValuePair<string, string>>();
+      postData.Add(new KeyValuePair<string, string>("profileId", profileId.ToString()));
+      postData.Add(new KeyValuePair<string, string>("email", email));
+
+      HttpContent postContent = new FormUrlEncodedContent(postData);
+
+      string endpointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Verification_email, requestSettings, new Dictionary<string,string>());
+
+      var response = apiHttpRequester.IssueApiPOSTRequest<object>(endpointUrl, postContent);
+
       return "";
     }
 
     public string GetPhoneVerificationCode(int profileId, string dialCode, string cellPhone)
     {
+      var postData = new List<KeyValuePair<string, string>>();
+      postData.Add(new KeyValuePair<string, string>("profileId", profileId.ToString()));
+      postData.Add(new KeyValuePair<string, string>("dialCode", dialCode));
+      postData.Add(new KeyValuePair<string, string>("cellPhone", cellPhone));
+
+      HttpContent postContent = new FormUrlEncodedContent(postData);
+
+      string endpointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Verification_phone, requestSettings, new Dictionary<string, string>());
+
+      var response = apiHttpRequester.IssueApiPOSTRequest<object>(endpointUrl, postContent);
+
       return "";
     }
   }
