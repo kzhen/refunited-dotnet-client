@@ -169,25 +169,25 @@ namespace RefugeesUnitedApi
     {
     }
 
-    public string GetEmailVerificationCode(int profileId, string email)
+    public EmailVerificationToken GetEmailVerificationCode(int profileId, string email)
     {
       var postData = new List<KeyValuePair<string, string>>();
-      postData.Add(new KeyValuePair<string, string>("profileId", profileId.ToString()));
+      postData.Add(new KeyValuePair<string, string>("userProfileId", profileId.ToString()));
       postData.Add(new KeyValuePair<string, string>("email", email));
 
       HttpContent postContent = new FormUrlEncodedContent(postData);
 
       string endpointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Verification_email, requestSettings, new Dictionary<string,string>());
 
-      var response = apiHttpRequester.IssueApiPOSTRequest<object>(endpointUrl, postContent);
+      var response = apiHttpRequester.IssueApiPOSTRequest<EmailVerificationToken>(endpointUrl, postContent);
 
-      return "";
+      return response;
     }
 
-    public string GetPhoneVerificationCode(int profileId, string dialCode, string cellPhone)
+    public PhoneVerificationToken GetPhoneVerificationCode(int profileId, string dialCode, string cellPhone)
     {
       var postData = new List<KeyValuePair<string, string>>();
-      postData.Add(new KeyValuePair<string, string>("profileId", profileId.ToString()));
+      postData.Add(new KeyValuePair<string, string>("userProfileId", profileId.ToString()));
       postData.Add(new KeyValuePair<string, string>("dialCode", dialCode));
       postData.Add(new KeyValuePair<string, string>("cellPhone", cellPhone));
 
@@ -195,9 +195,9 @@ namespace RefugeesUnitedApi
 
       string endpointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Verification_phone, requestSettings, new Dictionary<string, string>());
 
-      var response = apiHttpRequester.IssueApiPOSTRequest<object>(endpointUrl, postContent);
+      var response = apiHttpRequester.IssueApiPOSTRequest<PhoneVerificationToken>(endpointUrl, postContent);
 
-      return "";
+      return response;
     }
   }
 }
