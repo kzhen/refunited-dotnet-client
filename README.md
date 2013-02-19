@@ -9,3 +9,8 @@ Getting Started
 ================
 
 To get this working you will need the endpoint url and a valid username / password.
+
+Tests
+======
+
+Not all of the tests will pass without supplying valid email addresses / phone numbers. These details have been removed
