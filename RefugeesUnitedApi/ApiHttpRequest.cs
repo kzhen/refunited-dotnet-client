@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http.Headers;
 
 namespace RefugeesUnitedApi
 {
@@ -69,10 +70,15 @@ namespace RefugeesUnitedApi
           var postData = new List<KeyValuePair<string, string>>();
           foreach (var item in putContent)
           {
-            postData.Add(new KeyValuePair<string, string>(item.Key, item.Value));            
+            postData.Add(new KeyValuePair<string, string>(item.Key, item.Value));
           }
 
-          HttpContent content = new FormUrlEncodedContent(postData); 
+          var entries = putContent.Select(d =>
+            string.Format("\"{0}\": \"{1}\"", d.Key, string.Join(",", d.Value))
+            );
+
+          HttpContent content = new StringContent("{" + string.Join(",", entries) + "}");
+          content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
           var response = client.PutAsync(endPointUrl, content).Result;
 
