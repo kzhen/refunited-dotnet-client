@@ -19,5 +19,6 @@ namespace RefugeesUnitedApi
     void CompleteVerification(int profileId, string verificationCode);
     EmailVerificationToken GetEmailVerificationCode(int profileId, string email);
     PhoneVerificationToken GetPhoneVerificationCode(int profileId, string dialCode, string cellPhone);
+    bool AddProfileFavourite(int profileId, int targetProfileId);
   }
 }

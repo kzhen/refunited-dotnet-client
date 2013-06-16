@@ -161,6 +161,7 @@ namespace RefugeesUnitedApi
       putContent["surName"] = profile.Surname;
       putContent["dialCode"] = profile.DialCode;
       putContent["cellPhone"] = profile.CellPhoneNumber;
+      putContent["countryOfBirthId"] = profile.CountryOfBirthId.Value.ToString();
 
       var result = apiHttpRequester.IssueApiPUTRequest<Profile>(endPointUrl, putContent);
     }
@@ -198,6 +199,23 @@ namespace RefugeesUnitedApi
       var response = apiHttpRequester.IssueApiPOSTRequest<PhoneVerificationToken>(endpointUrl, postContent);
 
       return response;
+    }
+    
+    public bool AddProfileFavourite(int profileId, int targetProfileId)
+    {
+      var postData = new List<KeyValuePair<string, string>>();
+      postData.Add(new KeyValuePair<string,string>("targetProfileId", targetProfileId.ToString()));
+
+      HttpContent postContent = new FormUrlEncodedContent(postData);
+
+      var parameters = new Dictionary<string,string>();
+      parameters.Add("profileId", profileId.ToString());
+
+      string endpointUrl = ApiEndpointUris.GenerateEndPointUri(ApiEndpointUris.Profile_Favorites, requestSettings, parameters);
+
+      var response = apiHttpRequester.IssueApiPOSTRequest<object>(endpointUrl, postContent);
+
+      return true;
     }
   }
 }
